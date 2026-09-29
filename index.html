@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PGIRASA – Consultorio Veterinario San Francisco</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+:root {
+  --teal:      #006D77;
+  --teal-lt:   #83C5BE;
+  --teal-pale: #EDF6F9;
+  --green:     #1A5C3A;
+  --lime:      #52B788;
+  --yellow:    #E9C46A;
+  --orange:    #E76F51;
+  --red:       #C0392B;
+  --dark:      #17252A;
+  --mid:       #3D5A5E;
+  --gray:      #6B7F82;
+  --light:     #F4FAFB;
+  --white:     #FFFFFF;
+  --border:    #D5E8EC;
+  --serif:     'Playfair Display', Georgia, serif;
+  --sans:      'Source Sans 3', 'Segoe UI', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--light); color: var(--dark); font-size: 15px; line-height: 1.7; }
+
+/* ── SIDEBAR ── */
+#sidebar {
+  position: fixed; top: 0; left: 0; width: 260px; height: 100vh;
+  background: var(--dark); overflow-y: auto; z-index: 100;
+  display: flex; flex-direction: column;
+  transition: transform .3s;
+}
+#sidebar-logo {
+  padding: 28px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+#sidebar-logo .logo-icon { font-size: 2rem; }
+#sidebar-logo h2 { font-family: var(--serif); font-size: 1rem; color: var(--teal-lt); margin-top: 6px; line-height: 1.3; }
+#sidebar-logo p { font-size: 0.72rem; color: var(--gray); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+nav { padding: 12px 0 24px; flex: 1; }
+nav .nav-section { font-size: 0.68rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; padding: 14px 20px 4px; }
+nav a {
+  display: block; padding: 8px 20px; font-size: 0.85rem; color: rgba(255,255,255,0.65);
+  text-decoration: none; border-left: 3px solid transparent; transition: all .15s;
+}
+nav a:hover { color: var(--teal-lt); background: rgba(131,197,190,0.06); }
+nav a.active { color: var(--teal-lt); border-left-color: var(--teal-lt); background: rgba(131,197,190,0.1); font-weight: 600; }
+nav .nav-badge { font-size: 0.68rem; background: var(--teal); color: white; padding: 1px 6px; border-radius: 10px; float: right; margin-top: 2px; }
+
+#sidebar-footer { padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+#sidebar-footer p { font-size: 0.72rem; color: var(--gray); line-height: 1.5; }
+
+/* ── MAIN ── */
+#main { margin-left: 260px; min-height: 100vh; }
+
+/* ── HERO ── */
+#hero {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--green) 100%);
+  padding: 56px 56px 48px;
+  position: relative; overflow: hidden;
+}
+#hero::before {
+  content: ''; position: absolute; right: -60px; top: -60px;
+  width: 340px; height: 340px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+#hero::after {
+  content: ''; position: absolute; right: 80px; bottom: -80px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+#hero .doc-type { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal-lt); margin-bottom: 10px; }
+#hero h1 { font-family: var(--serif); font-size: 2.2rem; color: white; line-height: 1.25; max-width: 640px; }
+#hero .subtitle { font-size: 1.05rem; color: rgba(255,255,255,0.75); margin-top: 12px; max-width: 580px; }
+.meta-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.chip {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem;
+}
+.chip-icon { font-size: 0.9rem; }
+.status-bar {
+  margin-top: 28px; background: rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 16px 20px;
+  display: flex; gap: 32px; flex-wrap: wrap;
+}
+.status-item { text-align: center; }
+.status-item .val { font-family: var(--serif); font-size: 1.5rem; color: white; }
+.status-item .lbl { font-size: 0.72rem; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── CONTENT ── */
+.content { padding: 40px 56px; }
+.section { margin-bottom: 40px; }
+.section-anchor { display: block; height: 80px; margin-top: -80px; visibility: hidden; }
+
+.section-title {
+  font-family: var(--serif); font-size: 1.55rem; color: var(--teal);
+  margin-bottom: 4px; display: flex; align-items: center; gap: 10px;
+}
+.section-title .s-icon { font-size: 1.3rem; }
+.section-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.06em; }
+hr.s-line { border: none; border-top: 2px solid var(--teal-lt); margin-bottom: 24px; width: 48px; }
+
+/* Cards */
+.card {
+  background: var(--white); border-radius: 12px; padding: 24px 28px;
+  box-shadow: 0 2px 12px rgba(0,44,51,0.07); margin-bottom: 20px;
+  border-left: 4px solid var(--teal);
+}
+.card.green  { border-left-color: var(--lime); }
+.card.orange { border-left-color: var(--orange); }
+.card.red    { border-left-color: var(--red); }
+.card.yellow { border-left-color: var(--yellow); }
+.card.gray   { border-left-color: var(--gray); }
+.card h3 { font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.card h3 .tag {
+  font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+  background: var(--teal-pale); color: var(--teal); text-transform: uppercase; letter-spacing: 0.05em;
+}
+.card p, .card li { font-size: 0.9rem; color: var(--mid); line-height: 1.7; }
+.card ul { padding-left: 18px; }
+.card ul li { margin-bottom: 4px; }
+
+/* Info rows */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.info-box { background: var(--white); border-radius: 10px; padding: 16px 20px; box-shadow: 0 1px 6px rgba(0,44,51,0.06); }
+.info-box .lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 4px; }
+.info-box .val { font-size: 0.95rem; font-weight: 600; color: var(--dark); }
+
+/* Tables */
+.tbl-wrap { overflow-x: auto; margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 8px rgba(0,44,51,0.06); font-size: 0.88rem; }
+thead tr { background: var(--dark); }
+thead th { padding: 11px 14px; text-align: left; color: var(--teal-lt); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+tbody td { padding: 10px 14px; border-bottom: 1px solid #EEF4F5; color: var(--mid); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--teal-pale); }
+.badge-p { background: #FDECEA; color: var(--red); font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 8px; }
+.badge-np { background: #E8F5E9; color: var(--green); font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 8px; }
+
+/* Colores bolsas */
+.bolsa { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
+.b-roja  { background: var(--red); }
+.b-negra { background: #333; }
+.b-blanca{ background: #ddd; border: 1px solid #aaa; }
+.b-verde { background: var(--lime); }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before { content:''; position:absolute; left:10px; top:4px; bottom:4px; width:2px; background: var(--teal-lt); }
+.tl-item { position: relative; margin-bottom: 20px; }
+.tl-dot { position:absolute; left:-26px; top:4px; width:16px; height:16px; border-radius:50%; background: var(--teal); border:2px solid var(--white); box-shadow:0 0 0 2px var(--teal-lt); }
+.tl-item h4 { font-size:0.92rem; font-weight:600; color:var(--dark); }
+.tl-item p { font-size:0.86rem; color:var(--gray); margin-top:2px; }
+
+/* Contingencia rows */
+.cont-row { display:flex; gap:16px; align-items:flex-start; background:var(--white); border-radius:10px; padding:16px 18px; margin-bottom:12px; box-shadow:0 1px 5px rgba(0,44,51,0.05); }
+.cont-icon { font-size:1.6rem; flex-shrink:0; margin-top:2px; }
+.cont-row h4 { font-size:0.9rem; font-weight:600; color:var(--dark); margin-bottom:4px; }
+.cont-row p, .cont-row li { font-size:0.86rem; color:var(--mid); }
+.cont-row ul { padding-left:16px; }
+
+/* Firma */
+.firma-box {
+  background: var(--white); border-radius: 12px; padding: 28px 32px;
+  box-shadow: 0 2px 12px rgba(0,44,51,0.08); margin-top: 24px;
+  border: 2px solid var(--teal-lt); text-align: center;
+}
+.firma-box h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--teal); margin-bottom: 20px; }
+.firma-line { border-bottom: 2px solid var(--dark); width: 260px; margin: 40px auto 8px; }
+.firma-label { font-size: 0.8rem; color: var(--gray); }
+.firma-name { font-family: var(--serif); font-size: 1.1rem; color: var(--dark); margin-top: 6px; font-style: italic; }
+
+/* Alert boxes */
+.alert { border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; font-size: 0.88rem; display:flex; gap:10px; align-items:flex-start; }
+.alert-icon { font-size: 1.1rem; flex-shrink:0; margin-top:1px; }
+.alert.info    { background:#E3F2FD; border-left:4px solid #1976D2; color:#1A4E7A; }
+.alert.warning { background:#FFF8E1; border-left:4px solid var(--yellow); color:#7A5C00; }
+.alert.danger  { background:#FFF0EE; border-left:4px solid var(--orange); color:#8B2500; }
+.alert.success { background:#E8F5E9; border-left:4px solid var(--lime); color:#1A5C3A; }
+
+/* Indicadores */
+.indicadores-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:14px; margin-bottom:20px; }
+.ind-card { background:var(--white); border-radius:10px; padding:18px 20px; box-shadow:0 1px 6px rgba(0,44,51,0.06); border-top:3px solid var(--teal); }
+.ind-card .formula { font-family:monospace; font-size:0.8rem; background:var(--teal-pale); color:var(--teal); padding:6px 10px; border-radius:6px; margin:8px 0; display:block; }
+.ind-card h4 { font-size:0.88rem; font-weight:600; color:var(--dark); }
+.ind-card p { font-size:0.8rem; color:var(--gray); margin-top:4px; }
+
+/* Cronograma */
+.crono-table td:first-child { font-weight:600; color:var(--dark); width:220px; }
+.crono-month { width:26px; text-align:center; font-size:0.75rem; }
+.crono-dot { width:18px; height:18px; border-radius:50%; margin:auto; }
+.dot-active { background:var(--teal); }
+.dot-empty  { background:#e0ecee; }
+
+/* Print */
+@media print { #sidebar { display:none; } #main { margin-left:0; } .content { padding:20px; } }
+
+/* Mobile */
+@media (max-width: 820px) {
+  #sidebar { transform: translateX(-260px); }
+  #main { margin-left: 0; }
+  .content { padding: 24px 20px; }
+  #hero { padding: 36px 24px 32px; }
+  #hero h1 { font-size: 1.6rem; }
+  .info-grid { grid-template-columns: 1fr; }
+}
+
+/* Scroll active nav */
+nav a { transition: all .12s; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════════════════════ -->
+<div id="sidebar">
+  <div id="sidebar-logo">
+    <div class="logo-icon">🐾</div>
+    <h2>Consultorio Veterinario San Francisco</h2>
+    <p>PGIRASA · Res. 591 / 2024</p>
+  </div>
+  <nav>
+    <div class="nav-section">Encabezado</div>
+    <a href="#s-compromiso">Compromiso Institucional</a>
+    <a href="#s-info">Información General</a>
+
+    <div class="nav-section">Gestión Interna</div>
+    <a href="#s-diagnostico">1. Diagnóstico</a>
+    <a href="#s-areas">2. Áreas Generadoras</a>
+    <a href="#s-clasificacion">3. Clasificación de Residuos</a>
+    <a href="#s-prevencion">4. Prevención y Minimización</a>
+    <a href="#s-segregacion">5. Segregación en la Fuente</a>
+    <a href="#s-movimiento">6. Movimiento Interno</a>
+    <a href="#s-almacenamiento">7. Almacenamiento</a>
+    <a href="#s-limpieza">8. Limpieza y Desinfección</a>
+
+    <div class="nav-section">Programas</div>
+    <a href="#s-capacitacion">9. Capacitación</a>
+    <a href="#s-contingencia">10. Plan de Contingencia</a>
+    <a href="#s-sst">11. Seguridad y Salud</a>
+    <a href="#s-cronograma">12. Cronograma</a>
+
+    <div class="nav-section">Gestión Externa</div>
+    <a href="#s-externa">13. Gestión Externa</a>
+    <a href="#s-indicadores">14. Indicadores</a>
+    <a href="#s-seguimiento">15. Seguimiento</a>
+  </nav>
+  <div id="sidebar-footer">
+    <p>📄 Documento de ejemplo para capacitaciones<br>Pensamiento Animal · Zipaquirá</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════ -->
+<div id="main">
+<div id="hero">
+  <div class="doc-type">⚠️ Documento de ejemplo — Uso pedagógico</div>
+  <h1>Plan de Gestión Integral de Residuos Generados en la Atención en Salud y Otras Actividades</h1>
+  <p class="subtitle">Consultorio Veterinario San Francisco · Zipaquirá, Cundinamarca</p>
+  <div class="meta-chips">
+    <span class="chip"><span class="chip-icon">🏥</span> Servicios veterinarios</span>
+    <span class="chip"><span class="chip-icon">🔬</span> Micro generador</span>
+    <span class="chip"><span class="chip-icon">📋</span> Res. 591/2024</span>
+    <span class="chip"><span class="chip-icon">📅</span> Versión 2025</span>
+  </div>
+  <div class="status-bar">
+    <div class="status-item"><div class="val">1</div><div class="lbl">Médico veterinario</div></div>
+    <div class="status-item"><div class="val">&lt; 10</div><div class="lbl">kg RESPEL / mes</div></div>
+    <div class="status-item"><div class="val">Micro</div><div class="lbl">Tipo generador</div></div>
+    <div class="status-item"><div class="val">2025</div><div class="lbl">Año vigencia</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CONTENT
+═══════════════════════════════════════════════════════════ -->
+<div class="content">
+
+  <!-- ALERTA PEDAGÓGICA -->
+  <div class="alert warning">
+    <span class="alert-icon">📚</span>
+    <div><strong>Material de capacitación:</strong> Este PGIRASA es un ejemplo ficticio elaborado por el Médico Veterinario Oscar Buitrago de Pensamiento Animal para ilustrar cómo debe documentarse el plan en un consultorio veterinario tipo micro generador. Los datos del establecimiento, propietario y gestor son ficticios. Puede usarse como plantilla adaptable.</div>
+  </div>
+
+  <!-- ── COMPROMISO ── -->
+  <span class="section-anchor" id="s-compromiso"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">✍️</span> Compromiso Institucional</div>
+    <div class="section-sub">Numeral 4.1.1.1 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="firma-box">
+      <h3>Compromiso Institucional para la Gestión Integral de Residuos</h3>
+      <p style="font-size:0.9rem;color:var(--mid);max-width:640px;margin:0 auto;text-align:left;line-height:1.8;">
+        Yo, <strong>María Isabel Rodríguez Pérez</strong>, en mi calidad de propietaria y representante legal del <strong>Consultorio Veterinario San Francisco</strong>, identificada con C.C. 12.345.678, me comprometo formalmente a:
+      </p>
+      <ul style="text-align:left;max-width:620px;margin:16px auto;font-size:0.9rem;color:var(--mid);line-height:1.8;">
+        <li>Formular, implementar y mantener actualizado el presente Plan de Gestión Integral de Residuos Generados en la Atención en Salud y Otras Actividades (PGIRASA), conforme a lo establecido en la Resolución 591 de 2024 expedida por los Ministerios de Salud y Protección Social y de Ambiente y Desarrollo Sostenible.</li>
+        <li>Destinar los recursos humanos, técnicos y económicos necesarios para el cumplimiento de este Plan.</li>
+        <li>Garantizar que todo el personal del establecimiento sea capacitado en la gestión integral de residuos.</li>
+        <li>Asumir la responsabilidad por los residuos peligrosos generados en el establecimiento, desde su generación hasta su disposición final, conforme a la Ley 1252 de 2008 y el Decreto 780 de 2016.</li>
+        <li>Mantener este documento disponible para las autoridades sanitarias y ambientales competentes cuando lo requieran.</li>
+      </ul>
+      <div class="firma-line"></div>
+      <div class="firma-name">María Isabel Rodríguez Pérez</div>
+      <div class="firma-label">Médica Veterinaria · Propietaria y Representante Legal<br>C.C. 12.345.678 · M.V. COMVEZCOL TP XX.XXX</div>
+      <div style="margin-top:20px;font-size:0.82rem;color:var(--gray);">Zipaquirá, Cundinamarca · Enero de 2025</div>
+    </div>
+  </div>
+
+  <!-- ── INFO GENERAL ── -->
+  <span class="section-anchor" id="s-info"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🏥</span> Información General del Establecimiento</div>
+    <div class="section-sub">Identificación y datos administrativos</div>
+    <hr class="s-line">
+
+    <div class="info-grid">
+      <div class="info-box"><div class="lbl">Razón social / Nombre comercial</div><div class="val">Consultorio Veterinario San Francisco</div></div>
+      <div class="info-box"><div class="lbl">NIT / CC propietario</div><div class="val">12.345.678-3</div></div>
+      <div class="info-box"><div class="lbl">Dirección</div><div class="val">Calle 7 No. 8-42, Barrio Centro, Zipaquirá, Cundinamarca</div></div>
+      <div class="info-box"><div class="lbl">Teléfono / Correo</div><div class="val">601 852 3310 · vetsfco@gmail.com</div></div>
+      <div class="info-box"><div class="lbl">Responsable del PGIRASA</div><div class="val">María Isabel Rodríguez Pérez (propietaria)</div></div>
+      <div class="info-box"><div class="lbl">Tipo de actividad (Decreto 780/2016)</div><div class="val">Servicios veterinarios — Art. 2.8.10.2, num. 8</div></div>
+      <div class="info-box"><div class="lbl">Tipo de generador</div><div class="val">🔬 MICRO GENERADOR (&lt; 10 kg RESPEL/mes)</div></div>
+      <div class="info-box"><div class="lbl">Horario de atención</div><div class="val">Lun–Vie 8:00–18:00 · Sáb 8:00–13:00</div></div>
+    </div>
+
+    <div class="card">
+      <h3>👥 Personal del establecimiento</h3>
+      <table>
+        <thead><tr><th>Nombre</th><th>Cargo</th><th>Rol en GIRASA</th></tr></thead>
+        <tbody>
+          <tr><td>María Isabel Rodríguez Pérez</td><td>Médica Veterinaria / Propietaria</td><td>Responsable PGIRASA, manipulación de residuos peligrosos</td></tr>
+          <tr><td>Luis Armando Torres Gómez</td><td>Auxiliar veterinario</td><td>Apoyo en segregación, movimiento interno y limpieza</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── DIAGNÓSTICO ── -->
+  <span class="section-anchor" id="s-diagnostico"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🔍</span> 1. Diagnóstico — Actividades y Servicios</div>
+    <div class="section-sub">Numeral 4.1.1.3.1.1 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="card">
+      <h3>📋 Descripción de los servicios prestados</h3>
+      <p>El Consultorio Veterinario San Francisco presta los siguientes servicios de atención médica a animales de compañía (caninos y felinos):</p>
+      <ul style="margin-top:10px;">
+        <li><strong>Consulta médica general:</strong> valoración clínica, diagnóstico y formulación.</li>
+        <li><strong>Vacunación:</strong> aplicación de biológicos mediante jeringas desechables.</li>
+        <li><strong>Desparasitación:</strong> administración oral o inyectable de antiparasitarios.</li>
+        <li><strong>Toma de muestras:</strong> hemoleucograma, coprológico, citología básica.</li>
+        <li><strong>Procedimientos menores:</strong> limpieza de oídos, expresión de glándulas anales, curaciones superficiales, suturas de heridas simples.</li>
+        <li><strong>Dispensación de medicamentos:</strong> venta de medicamentos de uso veterinario bajo prescripción médica.</li>
+        <li><strong>Eutanasia:</strong> ocasionalmente, previo consentimiento del propietario.</li>
+      </ul>
+      <div class="alert info" style="margin-top:14px;">
+        <span class="alert-icon">ℹ️</span>
+        <span>El establecimiento <strong>NO realiza cirugías, hospitalizaciones ni estudios de imágenes (radiología)</strong>. No genera residuos radiactivos.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ÁREAS GENERADORAS ── -->
+  <span class="section-anchor" id="s-areas"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🗺️</span> 2. Áreas o Procesos Generadores de Residuos</div>
+    <div class="section-sub">Numeral 4.1.1.3.1.2 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Área / Proceso</th><th>Actividades que generan residuos</th><th>Tipo de residuos principales</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Sala de espera / recepción</strong></td>
+            <td>Atención al público, dispensación de productos</td>
+            <td><span class="badge-np">No peligroso</span> papel, envases vacíos de productos</td>
+          </tr>
+          <tr>
+            <td><strong>Consultorio de atención</strong></td>
+            <td>Consulta, vacunación, toma de muestras, curaciones, eutanasia</td>
+            <td><span class="badge-p">Peligroso</span> agujas, gasas, guantes, algodón con sangre, materiales biológicos, medicamentos vencidos</td>
+          </tr>
+          <tr>
+            <td><strong>Zona de preparación / limpieza</strong></td>
+            <td>Lavado de instrumental, limpieza general</td>
+            <td><span class="badge-np">No peligroso</span> papel absorbente, envases de desinfectantes</td>
+          </tr>
+          <tr>
+            <td><strong>Baño / zona de aseo</strong></td>
+            <td>Higiene del personal</td>
+            <td><span class="badge-np">No peligroso</span> papel higiénico, empaques</td>
+          </tr>
+          <tr>
+            <td><strong>Área administrativa</strong></td>
+            <td>Gestión documental, facturación</td>
+            <td><span class="badge-np">No peligroso</span> papel, cartón, envases plásticos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── CLASIFICACIÓN ── -->
+  <span class="section-anchor" id="s-clasificacion"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🗂️</span> 3. Identificación, Clasificación y Cuantificación</div>
+    <div class="section-sub">Numeral 4.1.1.3.1.3 · Res. 591/2024 · Art. 2.8.10.5 D.780/2016</div>
+    <hr class="s-line">
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Clasificación</th><th>Subclasificación</th><th>Ejemplos en este consultorio</th>
+            <th>Bolsa / Recipiente</th><th>Cantidad estimada</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="3"><strong>No peligrosos<br>aprovechables</strong></td>
+            <td>Plástico</td>
+            <td>Botellas, empaques de medicamentos, jeringas sin aguja (sin contaminación)</td>
+            <td><span class="bolsa b-blanca"></span>Bolsa blanca</td>
+            <td>~2 kg/mes</td>
+          </tr>
+          <tr>
+            <td>Papel y cartón</td>
+            <td>Cajas de medicamentos, papel de fórmulas, registros viejos</td>
+            <td><span class="bolsa b-blanca"></span>Bolsa blanca</td>
+            <td>~1 kg/mes</td>
+          </tr>
+          <tr>
+            <td>Orgánicos</td>
+            <td>Restos de alimento (del personal)</td>
+            <td><span class="bolsa b-verde"></span>Bolsa verde</td>
+            <td>~0.5 kg/mes</td>
+          </tr>
+          <tr>
+            <td><strong>No peligrosos no aprovechables</strong></td>
+            <td>—</td>
+            <td>Empaques sucios sin riesgo biológico, servilletas, otros desechos ordinarios</td>
+            <td><span class="bolsa b-negra"></span>Bolsa negra</td>
+            <td>~3 kg/mes</td>
+          </tr>
+          <tr style="background:#FFF5F5">
+            <td rowspan="2"><strong>⚠️ Peligrosos<br>Riesgo biológico</strong></td>
+            <td>Biosanitarios</td>
+            <td>Gasas con sangre, guantes usados, algodón con fluidos, jeringas SIN aguja ya usadas, vendas, baja lenguas</td>
+            <td><span class="bolsa b-roja"></span>Bolsa roja</td>
+            <td>~3.5 kg/mes</td>
+          </tr>
+          <tr style="background:#FFF5F5">
+            <td>Cortopunzantes</td>
+            <td>Agujas hipodérmicas, lancetas para glicemia, fragmentos de vidrio contaminado</td>
+            <td>🛡️ Guardián rojo rígido</td>
+            <td>~0.8 kg/mes</td>
+          </tr>
+          <tr style="background:#FFF5F5">
+            <td><strong>⚠️ Peligrosos<br>Otros</strong></td>
+            <td>Fármacos vencidos / tóxicos</td>
+            <td>Medicamentos vencidos, vacunas no aplicadas vencidas, soluciones de eutanasia (pentobarbital)</td>
+            <td>Recipiente etiquetado hermético</td>
+            <td>~0.5 kg/mes (esporádico)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card yellow">
+      <h3>⚖️ Clasificación del generador y cálculo de la media móvil <span class="tag">Tabla 2 · Res. 591/2024</span></h3>
+      <p>La cantidad de RESPEL (residuos peligrosos) se calcula con la <strong>media móvil de los últimos 6 meses</strong>. Para este consultorio:</p>
+      <ul style="margin-top:8px;">
+        <li>Residuos biosanitarios: ~3.5 kg/mes</li>
+        <li>Cortopunzantes: ~0.8 kg/mes</li>
+        <li>Fármacos vencidos: ~0.5 kg/mes (promedio)</li>
+        <li><strong>Total RESPEL estimado: ~4.8 kg/mes</strong></li>
+      </ul>
+      <div class="alert success" style="margin-top:12px;">
+        <span class="alert-icon">✅</span>
+        <span><strong>Clasificación: MICRO GENERADOR</strong> — genera menos de 10 kg de RESPEL por mes. Aplica el régimen simplificado del Manual.</span>
+      </div>
+    </div>
+
+    <div class="card gray">
+      <h3>📊 Formato de registro diario de residuos <span class="tag">Numeral 5.1</span></h3>
+      <p>Se diligencia al finalizar cada jornada de atención. El consolidado mensual se archiva en la carpeta PGIRASA.</p>
+      <div class="tbl-wrap" style="margin-top:12px;">
+        <table>
+          <thead><tr><th>Fecha</th><th>Biosanitarios (g)</th><th>Cortopunzantes (g)</th><th>No peligrosos (g)</th><th>Responsable</th></tr></thead>
+          <tbody>
+            <tr><td>15/01/2025</td><td>180</td><td>45</td><td>320</td><td>L. Torres</td></tr>
+            <tr><td>16/01/2025</td><td>210</td><td>30</td><td>290</td><td>L. Torres</td></tr>
+            <tr><td style="color:var(--gray);font-style:italic" colspan="5">… (diligenciar diariamente)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PREVENCIÓN ── -->
+  <span class="section-anchor" id="s-prevencion"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">♻️</span> 4. Prevención y Minimización de Residuos</div>
+    <div class="section-sub">Numeral 4.1.1.3.1.4 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="card green">
+      <h3>🌱 Estrategias implementadas en el consultorio</h3>
+      <ul>
+        <li><strong>Compras ajustadas:</strong> Se adquieren únicamente los medicamentos e insumos necesarios para el período de actividad, evitando la acumulación de productos próximos a vencer.</li>
+        <li><strong>Control de inventarios:</strong> Revisión semanal de fechas de vencimiento de medicamentos y vacunas. Los próximos a vencer se usan prioritariamente.</li>
+        <li><strong>Uso racional de insumos desechables:</strong> Se usan guantes solo en procedimientos que lo requieran. Las gasas se cortan al tamaño necesario para reducir desperdicio.</li>
+        <li><strong>Sustitución de productos:</strong> Se priorizan desinfectantes de bajo impacto ambiental (hipoclorito de sodio y amonio cuaternario) sobre productos con mayor carga química.</li>
+        <li><strong>Separación correcta:</strong> Las jeringas sin aguja (no contaminadas con sangre) se depositan en bolsa blanca para reciclaje, no en bolsa roja, reduciendo volumen de RESPEL.</li>
+        <li><strong>Devolución posconsumo:</strong> Los medicamentos vencidos o sin usar se devuelven a través del programa de posconsumo del proveedor o se entregan al gestor autorizado.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── SEGREGACIÓN ── -->
+  <span class="section-anchor" id="s-segregacion"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🗑️</span> 5. Segregación en la Fuente</div>
+    <div class="section-sub">Numeral 4.1.1.3.1.5 · Anexo 5.3 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="card">
+      <h3>🎨 Código de colores implementado <span class="tag">Tabla 6</span></h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Color</th><th>Tipo de residuo</th><th>Área de ubicación</th><th>Especificaciones del recipiente</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="bolsa b-roja"></span><strong>Rojo</strong></td>
+              <td>Biosanitarios (gasas, guantes, algodón con sangre)</td>
+              <td>Consultorio</td>
+              <td>Recipiente con <strong>apertura de pedal</strong>, bolsa roja polietileno AD mín. 1.4 mil, máx. ¾ lleno</td>
+            </tr>
+            <tr>
+              <td>🛡️ <strong>Guardián</strong></td>
+              <td>Cortopunzantes (agujas, lancetas)</td>
+              <td>Consultorio (zona de trabajo)</td>
+              <td>Rígido, pared mín. 1.2 mm, con tapa sellable, etiquetado. Máx. ¾ de capacidad y sellar</td>
+            </tr>
+            <tr>
+              <td><span class="bolsa b-blanca"></span><strong>Blanco</strong></td>
+              <td>Aprovechables: plástico, papel, cartón</td>
+              <td>Recepción, área administrativa</td>
+              <td>Recipiente con tapa, bolsa blanca, etiquetado con símbolo de reciclaje</td>
+            </tr>
+            <tr>
+              <td><span class="bolsa b-verde"></span><strong>Verde</strong></td>
+              <td>Orgánicos aprovechables</td>
+              <td>Zona de descanso del personal</td>
+              <td>Recipiente con tapa, bolsa verde</td>
+            </tr>
+            <tr>
+              <td><span class="bolsa b-negra"></span><strong>Negro</strong></td>
+              <td>No aprovechables (ordinarios)</td>
+              <td>Recepción, baño</td>
+              <td>Recipiente con tapa, bolsa negra</td>
+            </tr>
+            <tr>
+              <td>🟡 <strong>Recipiente especial</strong></td>
+              <td>Fármacos vencidos / tóxicos</td>
+              <td>Cuarto de almacenamiento</td>
+              <td>Recipiente hermético, rígido, etiquetado con nombre del residuo y fecha, aislado del piso</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card red">
+      <h3>💉 Condiciones especiales para cortopunzantes <span class="tag">Anexo 5.3-IV</span></h3>
+      <ul>
+        <li>Las agujas se introducen directamente al guardián <strong>sin volver a encapuchar</strong> (excepto si el médico determina mayor riesgo al no hacerlo, lo cual queda documentado).</li>
+        <li>Las fundas/capuchones se depositan en recipiente de residuos <strong>no peligrosos</strong> (bolsa negra), NO en el guardián.</li>
+        <li>El guardián se cierra herméticamente al llegar a <strong>¾ de su capacidad</strong> y se deposita en bolsa roja para su entrega al almacenamiento central.</li>
+        <li>Se usa un guardián de <strong>2 litros</strong> ubicado en la mesa de trabajo del consultorio, dentro del alcance directo del operador.</li>
+      </ul>
+    </div>
+
+    <div class="card orange">
+      <h3>🧫 Condiciones especiales para residuos de animales</h3>
+      <ul>
+        <li>Las biopsias, tejidos o partes corporales de animales resultantes de procedimientos (extirpación de masas, limpieza de heridas profundas) se depositan en <strong>bolsa roja</strong>.</li>
+        <li>Si el volumen es mayor a 200 g o puede generar lixiviados, se deposita en <strong>contenedor rígido con tapa</strong> y se refrigera a ≤ 4°C hasta su recolección.</li>
+        <li>El pelo de animales sin contaminación visible (ej. de baños) se deposita en <strong>bolsa roja</strong> (Riesgo biológico).</li>
+      </ul>
+    </div>
+
+    <div class="alert warning">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Ayudas visuales:</strong> En cada recipiente del consultorio hay una etiqueta plastificada con la imagen del tipo de residuo permitido, el color correspondiente y el símbolo de riesgo biológico donde aplica. Ver modelo de etiqueta en Anexo 5.5 de la Res. 591/2024.</span>
+    </div>
+  </div>
+
+  <!-- ── MOVIMIENTO INTERNO ── -->
+  <span class="section-anchor" id="s-movimiento"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🔄</span> 6. Movimiento Interno de Residuos</div>
+    <div class="section-sub">Numeral 4.1.1.3.1.6 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="card">
+      <h3>📍 Procedimiento de movimiento interno</h3>
+      <p style="margin-bottom:12px;">Dado que el establecimiento es pequeño (área ~40 m²), el movimiento interno se realiza directamente desde el punto de generación hacia el área de almacenamiento central (cuarto de aseo adaptado). No se requiere unidad de almacenamiento intermedio.</p>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <h4>Frecuencia</h4>
+          <p>Al finalizar cada jornada de atención (lunes a viernes 18:00, sábados 13:00). En caso de llenado anticipado de algún recipiente, se realiza el traslado inmediatamente.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <h4>Horario</h4>
+          <p>Fuera del horario de atención al público o en pausas sin pacientes, para evitar exposición de usuarios.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <h4>Responsable</h4>
+          <p>Luis Armando Torres Gómez (auxiliar veterinario) bajo supervisión de la médica propietaria.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <h4>Elementos de protección personal (EPP)</h4>
+          <p>Guantes de nitrilo de alta resistencia + tapabocas + bata o delantal. El EPP se retira y lava las manos al terminar.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <h4>Ruta</h4>
+          <p>Consultorio → pasillo de servicio → cuarto de almacenamiento central (al fondo del pasillo, con acceso directo a la puerta trasera). Los residuos peligrosos y no peligrosos se trasladan en momentos separados.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <span class="alert-icon">🗺️</span>
+      <span>Se dispone de un plano esquemático del establecimiento publicado en el área de almacenamiento central, con la ruta marcada con flechas y los puntos de generación identificados por color. (Ver Plano adjunto en carpeta PGIRASA).</span>
+    </div>
+  </div>
+
+  <!-- ── ALMACENAMIENTO ── -->
+  <span class="section-anchor" id="s-almacenamiento"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🏪</span> 7. Almacenamiento Interno de Residuos</div>
+    <div class="section-sub">Numeral 4.1.1.3.1.7 · Literal d) · Res. 591/2024 · Para micro/pequeño generador</div>
+    <hr class="s-line">
+
+    <div class="card">
+      <h3>🏠 Unidad de almacenamiento central</h3>
+      <p style="margin-bottom:12px;">Cuarto de aseo adaptado (3.2 m²), ubicado al fondo del pasillo de servicio, con acceso directo desde la puerta trasera del establecimiento.</p>
+      <div class="info-grid">
+        <div class="info-box"><div class="lbl">Superficie del piso y paredes</div><div class="val">Cerámica lisa, fácil de lavar y desinfectar</div></div>
+        <div class="info-box"><div class="lbl">Ventilación</div><div class="val">Ventana con malla antiinsectos + extractor de aire</div></div>
+        <div class="info-box"><div class="lbl">Iluminación</div><div class="val">Bombillo LED con interruptor propio</div></div>
+        <div class="info-box"><div class="lbl">Punto de agua</div><div class="val">Grifo con drenaje para limpieza de recipientes</div></div>
+        <div class="info-box"><div class="lbl">Control de acceso</div><div class="val">Puerta con cerrojo. Solo personal autorizado</div></div>
+        <div class="info-box"><div class="lbl">Señalización</div><div class="val">Aviso de identificación + señales de riesgo biológico + "No fumar" + uso de EPP</div></div>
+      </div>
+      <div class="card green" style="margin-top:16px;">
+        <h3>📦 Contenedores disponibles en el área de almacenamiento</h3>
+        <ul>
+          <li>1 contenedor rígido rojo (10 L) con tapa, para bolsas rojas con biosanitarios</li>
+          <li>1 contenedor negro (20 L) para residuos no aprovechables</li>
+          <li>1 canastilla blanca para aprovechables (plástico/papel)</li>
+          <li>1 contenedor hermético etiquetado para fármacos vencidos (aislado del piso, en repisa)</li>
+          <li>1 nevera pequeña (7 L) para residuos anatomopatológicos o de animales que requieran refrigeración (&lt;4°C)</li>
+          <li>⚖️ 1 báscula digital (capacidad 5 kg) para pesaje de RESPEL antes de entrega al transportador</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card yellow">
+      <h3>🧰 Kit antiderrames</h3>
+      <p>Ubicado en la repisa del área de almacenamiento. Contiene:</p>
+      <ul style="margin-top:8px;">
+        <li>Guantes de nitrilo gruesos o caucho de alto calibre (2 pares)</li>
+        <li>Gafas de seguridad o careta facial</li>
+        <li>Bata desechable o delantal impermeable</li>
+        <li>Tapabocas N95 (2 unidades)</li>
+        <li>Papel absorbente desechable</li>
+        <li>Bolsa roja de repuesto (2 unidades)</li>
+        <li>Solución de hipoclorito al 0.5% (frasco spray)</li>
+        <li>Señal de piso mojado</li>
+        <li>Recogedor y escoba/cepillo pequeño (derrame del guardián)</li>
+        <li>Pinzas largas tipo Kelly o similares (derrame del guardián)</li>
+        <li>Solidificador de líquidos o gel absorbente</li>
+        <li>Guardián de repuesto</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── LIMPIEZA ── -->
+  <span class="section-anchor" id="s-limpieza"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🧹</span> 8. Limpieza y Desinfección</div>
+    <div class="section-sub">Numeral 4.1.1.3.1.8 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Elemento</th><th>Procedimiento</th><th>Frecuencia</th><th>Producto / Concentración</th><th>EPP</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Recipientes rojos (biosanitarios)</strong></td>
+            <td>Retirar bolsa, lavar con agua y jabón, aplicar hipoclorito, enjuagar, secar</td>
+            <td>Cada vez que se cambia la bolsa (mín. cada 2 días)</td>
+            <td>Hipoclorito de sodio al 0.5% (500 ppm)</td>
+            <td>Guantes, tapabocas, gafas de seguridad, bata</td>
+          </tr>
+          <tr>
+            <td><strong>Contenedores de movimiento interno</strong></td>
+            <td>Enjuague con agua, lavado con jabón enzimático, desinfección con hipoclorito, secado</td>
+            <td>Cada vez que se usen para traslado</td>
+            <td>Hipoclorito 0.5%</td>
+            <td>Guantes, tapabocas, gafas de seguridad, bata</td>
+          </tr>
+          <tr>
+            <td><strong>Área de almacenamiento central</strong></td>
+            <td>Barrer, trapear con solución desinfectante, limpiar repisas y puerta</td>
+            <td>Semanal (cada vez que el gestor recoge los residuos)</td>
+            <td>Amonio cuaternario al 0.5%</td>
+            <td>Guantes, tapabocas, gafas de seguridad, bata</td>
+          </tr>
+          <tr>
+            <td><strong>Consultorio (piso, superficies)</strong></td>
+            <td>Limpieza de lo limpio a lo sucio, de arriba hacia abajo. Doble balde</td>
+            <td>Diaria al finalizar la jornada</td>
+            <td>Jabón + hipoclorito 0.1%</td>
+            <td>Guantes, tapabocas, gafas de seguridad, bata</td>
+          </tr>
+          <tr>
+            <td><strong>Derrame accidental de RESPEL</strong></td>
+            <td>Señalizar, colocar EPP completo, absorber con papel desechable, desinfectar zona, desechar en bolsa roja</td>
+            <td>Inmediatamente cuando ocurra</td>
+            <td>Hipoclorito 1%</td>
+            <td>Guantes gruesos, tapabocas N95, bata impermeable, gafas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="alert info">
+      <span class="alert-icon">📋</span>
+      <span>Se diligencia el <strong>formato de control de limpieza y desinfección</strong> (fecha, área, producto, responsable y firma) archivado mensualmente en la carpeta PGIRASA.</span>
+    </div>
+  </div>
+
+  <!-- ── CAPACITACIÓN ── -->
+  <span class="section-anchor" id="s-capacitacion"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">👥</span> 9. Programa de Capacitación y Socialización</div>
+    <div class="section-sub">Numeral 4.1.1.3.2 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="card">
+      <h3>🎯 Objetivo</h3>
+      <p>Garantizar que todo el personal del establecimiento (médica propietaria y auxiliar veterinario) conozca, comprenda e implemente adecuadamente las disposiciones del PGIRASA para minimizar los riesgos a la salud pública y al ambiente.</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Tema</th><th>Metodología</th><th>Responsable</th><th>Frecuencia</th><th>Población</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Inducción PGIRASA (clasificación, código de colores, segregación)</td><td>Capacitación presencial + material gráfico</td><td>M.V. Rodríguez</td><td>Al ingreso de nuevo personal</td><td>Todo el personal</td></tr>
+          <tr><td>2</td><td>Manejo seguro de cortopunzantes y guardianes</td><td>Demostración práctica</td><td>M.V. Rodríguez</td><td>Semestral</td><td>Todo el personal</td></tr>
+          <tr><td>3</td><td>Uso correcto de EPP en manejo de residuos</td><td>Práctica supervisada</td><td>M.V. Rodríguez</td><td>Semestral</td><td>Todo el personal</td></tr>
+          <tr><td>4</td><td>Procedimiento de limpieza y desinfección</td><td>Demostración in situ</td><td>M.V. Rodríguez</td><td>Anual y ante cambio de productos</td><td>Todo el personal</td></tr>
+          <tr><td>5</td><td>Plan de contingencia — simulacro de derrame</td><td>Simulacro práctico</td><td>M.V. Rodríguez</td><td>Anual</td><td>Todo el personal</td></tr>
+          <tr><td>6</td><td>Actualización normativa (cambios en Res. 591/2024)</td><td>Socialización verbal + documento</td><td>M.V. Rodríguez</td><td>Cuando haya cambios normativos</td><td>Todo el personal</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicadores-grid">
+      <div class="ind-card">
+        <h4>Indicador de Cobertura (ICC MRP)</h4>
+        <span class="formula">ICC = (Personas capacitadas / Total trabajadores) × 100</span>
+        <p>Meta: ≥ 100%. Actualmente: 2/2 personas = 100%</p>
+      </div>
+      <div class="ind-card">
+        <h4>Indicador de Cumplimiento (ICPC MRP)</h4>
+        <span class="formula">ICPC = (Capacitaciones realizadas / Programadas) × 100</span>
+        <p>Meta: ≥ 90%. Se registra en acta de capacitación.</p>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <span class="alert-icon">📝</span>
+      <span>Cada capacitación se registra en <strong>acta de asistencia</strong> con fecha, tema, duración, asistentes y firma. Las actas se archivan en la carpeta PGIRASA por un mínimo de 2 años.</span>
+    </div>
+  </div>
+
+  <!-- ── CONTINGENCIA ── -->
+  <span class="section-anchor" id="s-contingencia"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🚨</span> 10. Plan de Contingencia para Manejo de Residuos</div>
+    <div class="section-sub">Numeral 4.1.1.3.3 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="cont-row">
+      <div class="cont-icon">🔥</div>
+      <div>
+        <h4>Incendio en área de almacenamiento</h4>
+        <ul>
+          <li>Evacuar inmediatamente el área. Activar ruta de evacuación del establecimiento.</li>
+          <li>Llamar al Cuerpo de Bomberos Zipaquirá: <strong>119</strong>.</li>
+          <li>No intentar apagar el fuego si ya está extendido. Usar extintor tipo ABC solo si el fuego es pequeño y controlable.</li>
+          <li>Informar al gestor de residuos y a la Secretaría de Salud del incidente.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cont-row">
+      <div class="cont-icon">💧</div>
+      <div>
+        <h4>Interrupción del suministro de agua</h4>
+        <ul>
+          <li>Suspender temporalmente las actividades de limpieza y desinfección de recipientes.</li>
+          <li>Utilizar agua almacenada en el balde de reserva (10 L) ubicado en el cuarto de almacenamiento.</li>
+          <li>Si la interrupción supera 48 horas, informar a la Secretaría de Salud y limitar las actividades generadoras de RESPEL.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cont-row">
+      <div class="cont-icon">⚡</div>
+      <div>
+        <h4>Interrupción del suministro de energía</h4>
+        <ul>
+          <li>Verificar la temperatura de la nevera de residuos anatomopatológicos cada 2 horas con termómetro manual.</li>
+          <li>Si la interrupción supera 4 horas y la temperatura supera 4°C, contactar urgentemente al gestor de residuos para recolección de emergencia.</li>
+          <li>Linterna disponible en el botiquín del cuarto de almacenamiento.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cont-row">
+      <div class="cont-icon">☣️</div>
+      <div>
+        <h4>Derrame de residuos peligrosos (biosanitarios o fármacos)</h4>
+        <ul>
+          <li>No tocar el derrame con las manos desnudas. Colocarse inmediatamente el EPP del kit antiderrames.</li>
+          <li>Señalizar la zona con señal de piso mojado.</li>
+          <li>Absorber el derrame con papel absorbente desechable (de adentro hacia afuera).</li>
+          <li>Aplicar hipoclorito al 1% sobre la zona afectada, dejar actuar 10 minutos, limpiar y desechar todo en bolsa roja.</li>
+          <li>Registrar el evento en el formato de contingencias. Reportar a la M.V. Rodríguez si ocurre con el auxiliar.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cont-row">
+      <div class="cont-icon">💉</div>
+      <div>
+        <h4> Derrame de residuos peligrosos (cortopunzantes)</h4>
+        <ul>
+          <li>No recoger agujas con la mano directamente.</li>
+          <li>Utilizar las pinzas largas para reciger los cortopunzantes y depositarlos directamente en el nuevo guardián de repuesto.</li>
+          <li>Si hay sangre o fluidos, aplicar el solidificador sobre el derrame para covertirlo en gel.</li>
+          <li>Recoger el material sólido con el recogedor y la escoba y depositarlos en la bolsa roja</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cont-row">
+      <div class="cont-icon">🚛</div>
+      <div>
+        <h4>Interrupción temporal del servicio de recolección por el gestor</h4>
+        <ul>
+          <li>Contactar al gestor para conocer el tiempo estimado de restablecimiento del servicio.</li>
+          <li>Verificar capacidad de almacenamiento disponible. El área central tiene capacidad para hasta 3 semanas de generación típica.</li>
+          <li>Si la interrupción supera 1 mes, contactar gestor alternativo: <strong>Ecocapital Internacional S.A. E.S.P.</strong> (gestor autorizado Cundinamarca).</li>
+          <li>Informar a la Secretaría de Salud si el tiempo de almacenamiento supera el límite normativo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cont-row">
+      <div class="cont-icon">📈</div>
+      <div>
+        <h4>Aumento súbito en la generación de residuos (ej. campaña de vacunación)</h4>
+        <ul>
+          <li>Solicitar al gestor autorizado una recolección extraordinaria antes del llenado del almacenamiento.</li>
+          <li>Adquirir temporalmente guardianes y bolsas rojas adicionales.</li>
+          <li>Documentar el evento y la cantidad adicional generada en el formato de registro.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SST ── -->
+  <span class="section-anchor" id="s-sst"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🦺</span> 11. Seguridad y Salud en el Trabajo (SG-SST)</div>
+    <div class="section-sub">Numeral 4.1.1.3.4 · D.1072/2015 · Res. 312/2019 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="card">
+      <h3>🛡️ Medidas de SST relacionadas con el manejo de residuos</h3>
+      <ul>
+        <li><strong>Dotación de EPP:</strong> Se suministra a todo el personal: guantes de nitrilo, tapabocas, bata de trabajo y gafas de protección para procedimientos con riesgo de salpicadura.</li>
+        <li><strong>Vacunación del personal:</strong> Todo el personal tiene el esquema de vacunación al día: hepatitis B (3 dosis) y tétano (refuerzo cada 10 años). Certificados archivados en carpeta de personal.</li>
+        <li><strong>Accidente con cortopunzante:</strong> Protocolo documentado: lavado inmediato con agua y jabón, no exprimir la herida, reportar inmediatamente a la M.V. Rodríguez, asistir a urgencias (Hospital Mario Gaitán Yanguas, Zipaquirá) para seguimiento de exposición a sangre.</li>
+        <li><strong>Ergonomía:</strong> Los recipientes de residuos no superan el peso máximo de 15 kg antes de ser trasladados, para evitar sobreesfuerzos. El auxiliar usa técnica de levantamiento seguro.</li>
+        <li><strong>Estadísticas de accidentabilidad:</strong> Se registran todos los accidentes laborales relacionados con residuos en el formato de seguimiento anual (Anexo 5.6).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── CRONOGRAMA ── -->
+  <span class="section-anchor" id="s-cronograma"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">📅</span> 12. Cronograma Anual de Actividades PGIRASA — 2025</div>
+    <div class="section-sub">Numeral 4.1.1.3.5 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="tbl-wrap">
+      <table class="crono-table">
+        <thead>
+          <tr>
+            <th>Actividad</th><th>Responsable</th>
+            <th class="crono-month">E</th><th class="crono-month">F</th><th class="crono-month">M</th>
+            <th class="crono-month">A</th><th class="crono-month">M</th><th class="crono-month">J</th>
+            <th class="crono-month">J</th><th class="crono-month">A</th><th class="crono-month">S</th>
+            <th class="crono-month">O</th><th class="crono-month">N</th><th class="crono-month">D</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Diligenciamiento formato diario de residuos</td><td>L. Torres</td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td>
+          </tr>
+          <tr>
+            <td>Consolidado mensual de residuos (Anexo 5.1)</td><td>M.V. Rodríguez</td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-active"></div></td>
+          </tr>
+          <tr>
+            <td>Verificación de vacunas del personal</td><td>M.V. Rodríguez</td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td>
+          </tr>
+          <tr>
+            <td>Capacitación: manejo de cortopunzantes</td><td>M.V. Rodríguez</td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+          </tr>
+          <tr>
+            <td>Simulacro plan de contingencia (derrame)</td><td>M.V. Rodríguez</td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+          </tr>
+          <tr>
+            <td>Verificación y reposición del kit antiderrames</td><td>L. Torres</td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+          </tr>
+          <tr>
+            <td>Informe semestral interno de seguimiento</td><td>M.V. Rodríguez</td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td>
+          </tr>
+          <tr>
+            <td>Informe anual a la Secretaría de Salud (Anexo 5.6)</td><td>M.V. Rodríguez</td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+          </tr>
+          <tr>
+            <td>Revisión y actualización del PGIRASA</td><td>M.V. Rodríguez</td>
+            <td><div class="crono-dot dot-active"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td>
+            <td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-empty"></div></td><td><div class="crono-dot dot-active"></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── GESTIÓN EXTERNA ── -->
+  <span class="section-anchor" id="s-externa"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">🚛</span> 13. Gestión Externa de Residuos</div>
+    <div class="section-sub">Numeral 4.2 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="card">
+      <h3>🏭 Gestor de residuos peligrosos contratado</h3>
+      <div class="info-grid">
+        <div class="info-box"><div class="lbl">Razón social del gestor</div><div class="val">Descont S.A. E.S.P. (ficticias — reemplazar con gestor real)</div></div>
+        <div class="info-box"><div class="lbl">NIT</div><div class="val">900.XXX.XXX-X</div></div>
+        <div class="info-box"><div class="lbl">Licencia ambiental</div><div class="val">Res. XXX de 20XX — CAR Cundinamarca</div></div>
+        <div class="info-box"><div class="lbl">Tipo de tratamiento</div><div class="val">Térmico con combustión (incineración)</div></div>
+        <div class="info-box"><div class="lbl">Residuos que gestiona</div><div class="val">Biosanitarios, cortopunzantes, fármacos vencidos</div></div>
+        <div class="info-box"><div class="lbl">Frecuencia de recolección</div><div class="val">1 vez al mes (micro generador &lt; 10 kg/mes)</div></div>
+      </div>
+    </div>
+
+    <div class="card green">
+      <h3>📋 Obligaciones del generador en gestión externa <span class="tag">Num. 4.2.1.2</span></h3>
+      <ul>
+        <li><strong>Verificar licencias vigentes</strong> del transportador y gestor antes de contratar y anualmente.</li>
+        <li><strong>Pesar los RESPEL</strong> en la báscula del área de almacenamiento antes de entregarlos al transportador.</li>
+        <li><strong>Exigir y conservar el comprobante de recolección</strong> (copia física o digital) con: tipo de residuo, peso, placa del vehículo, nombre del conductor, fecha. Custodia mínima 5 años.</li>
+        <li><strong>Solicitar certificado de tratamiento</strong> al gestor tras cada recolección, indicando tipo de manejo realizado.</li>
+        <li><strong>Entregar hoja de seguridad (SDS)</strong> de los residuos peligrosos al transportador en cada recolección.</li>
+        <li>La entrega debe hacerla <strong>personal con EPP</strong> completo (guantes, tapabocas, bata).</li>
+      </ul>
+    </div>
+
+    <div class="card yellow">
+      <h3>📁 Archivo de documentos de gestión externa</h3>
+      <p>Se conservan en la carpeta física "GIRASA – Gestión Externa" y/o en carpeta digital:</p>
+      <ul style="margin-top:8px;">
+        <li>Comprobantes de recolección (todos los del año en curso + 5 años anteriores)</li>
+        <li>Certificados de tratamiento del gestor</li>
+        <li>Copia de las licencias ambientales del gestor y transportador vigentes</li>
+        <li>Contrato de prestación de servicios con el gestor</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── INDICADORES ── -->
+  <span class="section-anchor" id="s-indicadores"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">📊</span> 14. Indicadores de Gestión de Residuos</div>
+    <div class="section-sub">Numeral 5.7 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="indicadores-grid">
+      <div class="ind-card">
+        <h4>Indicador de Destinación — Tratamiento Térmico con Combustión</h4>
+        <span class="formula">IDTCC = (RTCC / RT) × 100</span>
+        <p>% de residuos enviados a incineración. Meta: ≥ 95% de los RESPEL.</p>
+      </div>
+      <div class="ind-card">
+        <h4>Indicador de Aprovechamiento</h4>
+        <span class="formula">IDA = (RA / RT) × 100</span>
+        <p>% de residuos no peligrosos enviados a reciclaje. Meta: ≥ 30%.</p>
+      </div>
+      <div class="ind-card">
+        <h4>Cobertura de Capacitación (ICC MRP)</h4>
+        <span class="formula">ICC = (Capacitados / Total personal) × 100</span>
+        <p>Meta: 100% del personal capacitado anualmente.</p>
+      </div>
+      <div class="ind-card">
+        <h4>Cumplimiento del Programa de Capacitación</h4>
+        <span class="formula">ICPC = (Realizadas / Programadas) × 100</span>
+        <p>Meta: ≥ 90% de las capacitaciones programadas ejecutadas.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEGUIMIENTO ── -->
+  <span class="section-anchor" id="s-seguimiento"></span>
+  <div class="section">
+    <div class="section-title"><span class="s-icon">📈</span> 15. Seguimiento e Información a la Autoridad Sanitaria</div>
+    <div class="section-sub">Numerales 4.1.3.2 y 4.2.1.3 · Res. 591/2024</div>
+    <hr class="s-line">
+
+    <div class="card">
+      <h3>🗂️ Documentos disponibles para la autoridad sanitaria <span class="tag">Tabla 4 · Res. 591/2024</span></h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Documento</th><th>Dónde está archivado</th><th>Tiempo de conservación</th></tr></thead>
+          <tbody>
+            <tr><td>Compromiso institucional firmado</td><td>Carpeta PGIRASA (original)</td><td>Durante la vigencia del plan</td></tr>
+            <tr><td>PGIRASA completo (este documento)</td><td>Carpeta PGIRASA + copia digital</td><td>Durante la vigencia</td></tr>
+            <tr><td>Formatos diarios de registro de residuos</td><td>Carpeta PGIRASA – archivador mensual</td><td>Mínimo 5 años</td></tr>
+            <tr><td>Consolidados mensuales (Anexo 5.1)</td><td>Carpeta PGIRASA – archivador anual</td><td>Mínimo 5 años</td></tr>
+            <tr><td>Actas de capacitación</td><td>Carpeta PGIRASA – sección Capacitaciones</td><td>Mínimo 2 años</td></tr>
+            <tr><td>Comprobantes de recolección de RESPEL</td><td>Carpeta GIRASA – Gestión Externa</td><td>Mínimo 5 años</td></tr>
+            <tr><td>Certificados de tratamiento del gestor</td><td>Carpeta GIRASA – Gestión Externa</td><td>Mínimo 5 años</td></tr>
+            <tr><td>Certificados de vacunación del personal</td><td>Carpeta Personal – SST</td><td>Durante la relación laboral</td></tr>
+            <tr><td>Informe anual de seguimiento (Anexo 5.6)</td><td>Carpeta PGIRASA + copia enviada a SecSalud</td><td>Mínimo 2 años</td></tr>
+            <tr><td>Registros de limpieza y desinfección</td><td>Carpeta PGIRASA – sección Limpieza</td><td>Mínimo 1 año</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card green">
+      <h3>📬 Informe anual a la Secretaría de Salud</h3>
+      <p>Anualmente, <strong>en el mes de febrero</strong>, se envía a la Secretaría de Salud de Zipaquirá el informe de gestión interna del año anterior, empleando el <strong>Formato del Anexo 5.6</strong> de la Res. 591/2024, con:</p>
+      <ul style="margin-top:8px;">
+        <li>Número y temas de capacitaciones realizadas vs. programadas</li>
+        <li>Número de accidentes laborales asociados a residuos y acciones correctivas</li>
+        <li>Contingencias ocurridas y acciones implementadas</li>
+        <li>Resultado de la auditoría interna anual</li>
+      </ul>
+    </div>
+
+    <div class="alert success">
+      <span class="alert-icon">✅</span>
+      <div>
+        <strong>Actualización del PGIRASA:</strong> Este plan debe actualizarse cuando se presente un cambio que incida en la gestión de residuos: nuevo servicio, nuevo personal, cambio de gestor externo, cambio en la generación de residuos, cambio de sede, o modificación normativa. La versión actualizada reemplaza la anterior y se registra con la nueva fecha.
+      </div>
+    </div>
+
+    <div class="firma-box" style="margin-top:32px;">
+      <h3>Elaboración y aprobación del documento</h3>
+      <div style="display:flex; gap:40px; justify-content:center; flex-wrap:wrap; margin-top:16px;">
+        <div>
+          <div class="firma-line" style="width:200px;"></div>
+          <div class="firma-name">María Isabel Rodríguez Pérez</div>
+          <div class="firma-label">Médica Veterinaria · Propietaria<br>C.C. 12.345.678 · M.V. COMVEZCOL XX.XXX</div>
+        </div>
+        <div>
+          <div class="firma-line" style="width:200px;"></div>
+          <div class="firma-name">Luis Armando Torres Gómez</div>
+          <div class="firma-label">Auxiliar Veterinario<br>C.C. 90.123.456</div>
+        </div>
+      </div>
+      <div style="margin-top:24px;font-size:0.82rem;color:var(--gray);">Zipaquirá, Cundinamarca · Enero de 2025 · Versión 1.0</div>
+      <div style="margin-top:8px;" class="alert warning">
+        <span class="alert-icon">📚</span>
+        <span><strong>Este es un documento de ejemplo pedagógico.</strong> Los datos del establecimiento, gestor y personas son ficticios. Elaborado por Médico Veterinario Oscar Buitrago - Pensamiento Animal.</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// Active nav on scroll
+const anchors = document.querySelectorAll('.section-anchor');
+const navLinks = document.querySelectorAll('nav a');
+
+function updateNav() {
+  let current = '';
+  anchors.forEach(a => {
+    if (window.scrollY >= a.offsetTop - 100) current = a.id;
+  });
+  navLinks.forEach(l => {
+    l.classList.remove('active');
+    if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+  });
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+updateNav();
+</script>
+</body>
+</html>
